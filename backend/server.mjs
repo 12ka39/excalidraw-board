@@ -17,6 +17,11 @@ try {
   const frontendPath = join(__dirname, '..', 'frontend');
   app.use(express.static(frontendPath));
 
+  // editor 경로 추가
+  app.get('/editor', (req, res) => {
+    res.sendFile(join(frontendPath, 'editor.html'));
+  });
+
   // GET: 모든 그림 조회
   app.get('/api/drawings', async (req, res) => {
     try {

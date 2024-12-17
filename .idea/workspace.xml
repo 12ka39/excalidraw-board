@@ -4,15 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0d2ab5f1-60b5-4e55-abc9-28bec89f5482" name="Changes" comment="FEAT: exclidraw 에디터 페이지 구현">
-      <change afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterDir="false" />
+    <list default="true" id="0d2ab5f1-60b5-4e55-abc9-28bec89f5482" name="Changes" comment="FEAT: 게시판 UI 개선 및 목록 조회 화면 구현">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/새 폴더.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/새 폴더.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/jsoncrud.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/backend/jsoncrud.mjs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/server.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/backend/server.mjs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/style/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/style/main.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/editor.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/scripts/api-client.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/scripts/board.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/scripts/editor.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/scripts/excalidraw-init.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/style/main.css" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,7 +74,7 @@
       <option name="presentableId" value="Default" />
       <updated>1734419336342</updated>
       <workItem from="1734419337371" duration="222000" />
-      <workItem from="1734419842741" duration="2879000" />
+      <workItem from="1734419842741" duration="7255000" />
     </task>
     <task id="LOCAL-00001" summary="FEAT: exclidraw 에디터 페이지 구현">
       <option name="closed" value="true" />
@@ -81,7 +84,15 @@
       <option name="project" value="LOCAL" />
       <updated>1734419978880</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="FEAT: 게시판 UI 개선 및 목록 조회 화면 구현">
+      <option name="closed" value="true" />
+      <created>1734424193973</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1734424193973</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -100,6 +111,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="FEAT: exclidraw 에디터 페이지 구현" />
-    <option name="LAST_COMMIT_MESSAGE" value="FEAT: exclidraw 에디터 페이지 구현" />
+    <MESSAGE value="FEAT: 게시판 UI 개선 및 목록 조회 화면 구현" />
+    <option name="LAST_COMMIT_MESSAGE" value="FEAT: 게시판 UI 개선 및 목록 조회 화면 구현" />
   </component>
 </project>
