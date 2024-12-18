@@ -4,9 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0d2ab5f1-60b5-4e55-abc9-28bec89f5482" name="Changes" comment="FEAT: 게시판 글작성 기능 일부 구현">
+    <list default="true" id="0d2ab5f1-60b5-4e55-abc9-28bec89f5482" name="Changes" comment="FIX: 코드 버전 충돌 해결">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-react/src/components/ExcalidrawEditor.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-react/src/components/ExcalidrawEditor.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/data/posts.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend/data/posts.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/server.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/backend/server.mjs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,22 +33,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feature/board-create&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/MZC-USER/Desktop/excalidraw-board&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "feature/board-create",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/MZC-USER/Desktop/excalidraw-board",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "npm.dev.executor": "Debug",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="dev" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
       <package-json value="$PROJECT_DIR$/package.json" />
@@ -83,6 +85,7 @@
       <updated>1734419336342</updated>
       <workItem from="1734419337371" duration="222000" />
       <workItem from="1734419842741" duration="11179000" />
+      <workItem from="1734484592842" duration="1807000" />
     </task>
     <task id="LOCAL-00001" summary="FEAT: exclidraw 에디터 페이지 구현">
       <option name="closed" value="true" />
@@ -124,7 +127,15 @@
       <option name="project" value="LOCAL" />
       <updated>1734432394514</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="FIX: 코드 버전 충돌 해결">
+      <option name="closed" value="true" />
+      <created>1734485124601</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1734485124601</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -146,6 +157,7 @@
     <MESSAGE value="FEAT: 게시판 UI 개선 및 목록 조회 화면 구현" />
     <MESSAGE value="FEAT: html구조에서 react로 프론트 변경" />
     <MESSAGE value="FEAT: 게시판 글작성 기능 일부 구현" />
-    <option name="LAST_COMMIT_MESSAGE" value="FEAT: 게시판 글작성 기능 일부 구현" />
+    <MESSAGE value="FIX: 코드 버전 충돌 해결" />
+    <option name="LAST_COMMIT_MESSAGE" value="FIX: 코드 버전 충돌 해결" />
   </component>
 </project>

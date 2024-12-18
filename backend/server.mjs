@@ -70,7 +70,7 @@ app.get('/api/posts/:id', async (req, res) => {
 // 게시글 작성
 app.post('/api/posts', async (req, res) => {
   try {
-    const { title, author, elements, appState } = req.body;
+    const { title, author, content } = req.body;
     const data = await fs.readFile(POSTS_FILE, 'utf-8');
     const { posts, lastId } = JSON.parse(data);
 
@@ -81,8 +81,8 @@ app.post('/api/posts', async (req, res) => {
       views: 0,
       date: new Date().toLocaleDateString(),
       content: {
-        elements,
-        appState
+        elements: content.elements,
+        appState: content.appState
       }
     };
 
@@ -91,7 +91,7 @@ app.post('/api/posts', async (req, res) => {
     await fs.writeFile(POSTS_FILE, JSON.stringify({
       posts,
       lastId: newPost.id
-    }));
+    }, null, 2)); // null, 2를 추가하여 JSON을 보기 좋게 포맷팅
 
     res.status(201).json(newPost);
   } catch (error) {
@@ -111,56 +111,3 @@ async function startServer() {
 }
 
 startServer().catch(console.error);
-
-// import express from 'express';
-// import cors from 'cors';
-// import { dirname, join } from 'path';
-// import { fileURLToPath } from 'url';
-// import { handleJsonCrud } from './jsoncrud.mjs';
-//
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = dirname(__filename);
-//
-// const app = express();
-// const PORT = process.env.PORT ?? 3000;
-//
-// try {
-//   app.use(cors());
-//   app.use(express.json({ limit: '50mb' }));  // JSON 크기 제한 설정
-//
-//   const frontendPath = join(__dirname, '..', 'frontend');
-//   app.use(express.static(frontendPath));
-//
-//   // editor 경로 추가
-//   app.get('/editor', (req, res) => {
-//     res.sendFile(join(frontendPath, 'editor.html'));
-//   });
-//
-//   // GET: 모든 그림 조회
-//   app.get('/api/drawings', async (req, res) => {
-//     try {
-//       const drawings = await handleJsonCrud.getDrawings();
-//       res.json(drawings);
-//     } catch (error) {
-//       res.status(500).json({ error: error.message });
-//     }
-//   });
-//
-//   // POST: 새 그림 저장
-//   app.post('/api/drawings', async (req, res) => {
-//     try {
-//       const newDrawing = await handleJsonCrud.saveDrawing(req.body);
-//       res.status(201).json(newDrawing);
-//     } catch (error) {
-//       res.status(500).json({ error: error.message });
-//     }
-//   });
-//
-//   app.listen(PORT, () => {
-//     console.log(`Server running on port ${PORT}`);
-//     console.log(`Frontend files being served from: ${frontendPath}`);
-//   });
-// } catch (error) {
-//   console.error('Server initialization failed:', error);
-//   process.exit(1);
-// }
