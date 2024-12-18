@@ -39,15 +39,16 @@ const BoardList = () => {
               </thead>
               <tbody className="text-gray-600 text-sm">
               {posts.map(post => (
-                  <tr key={post.id} className="border-b border-gray-100 hover:bg-purple-50 transition-colors">
+                  <tr
+                      key={post.id}
+                      onClick={() => navigate(`/post/${post.id}`)}
+                      className="border-b border-gray-100 hover:bg-purple-50 transition-colors cursor-pointer"
+                  >
                     <td className="py-4 px-6 text-center">{post.id}</td>
                     <td className="py-4 px-6">
-                      <button
-                          onClick={() => navigate(`/post/${post.id}`)}
-                          className="hover:text-purple-700 transition-colors text-left w-full"
-                      >
+                      <span className="hover:text-purple-700 transition-colors text-left w-full">
                         {post.title}
-                      </button>
+                      </span>
                     </td>
                     <td className="py-4 px-6">{post.author}</td>
                     <td className="py-4 px-6 text-center">{post.views}</td>

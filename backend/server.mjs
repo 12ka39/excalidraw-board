@@ -100,6 +100,70 @@ app.post('/api/posts', async (req, res) => {
   }
 });
 
+
+// 게시글 수정
+app.put('/api/posts/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, author, content } = req.body;
+    const data = await fs.readFile(POSTS_FILE, 'utf-8');
+    const { posts } = JSON.parse(data);
+
+    const postIndex = posts.findIndex(p => p.id === parseInt(id));
+    if (postIndex === -1) {
+      return res.status(404).json({ error: '게시글을 찾을 수 없습니다.' });
+    }
+
+    // 기존 게시글의 정보를 유지하면서 새로운 정보로 업데이트
+    posts[postIndex] = {
+      ...posts[postIndex],
+      title,
+      author,
+      content: {
+        elements: content.elements,
+        appState: content.appState
+      },
+      updatedAt: new Date().toISOString() // 수정 시간 추가
+    };
+
+    await fs.writeFile(POSTS_FILE, JSON.stringify({ posts, lastId: posts[0]?.id || 0 }, null, 2));
+    res.json(posts[postIndex]);
+  } catch (error) {
+    console.error('게시글 수정 오류:', error);
+    res.status(500).json({ error: '게시글 수정에 실패했습니다.' });
+  }
+});
+
+
+// 게시글 삭제
+app.delete('/api/posts/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const data = await fs.readFile(POSTS_FILE, 'utf-8');
+    const { posts } = JSON.parse(data);
+
+    const postIndex = posts.findIndex(p => p.id === parseInt(id));
+    if (postIndex === -1) {
+      return res.status(404).json({ error: '게시글을 찾을 수 없습니다.' });
+    }
+
+    // 게시글 삭제
+    posts.splice(postIndex, 1);
+
+    // 파일 업데이트
+    await fs.writeFile(POSTS_FILE, JSON.stringify({
+      posts,
+      lastId: posts[0]?.id || 0
+    }, null, 2));
+
+    res.json({ message: '게시글이 삭제되었습니다.' });
+  } catch (error) {
+    console.error('게시글 삭제 오류:', error);
+    res.status(500).json({ error: '게시글 삭제에 실패했습니다.' });
+  }
+});
+
+
 // 서버 초기화 및 시작
 async function startServer() {
   await ensureDataDir();
