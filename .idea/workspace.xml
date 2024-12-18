@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0d2ab5f1-60b5-4e55-abc9-28bec89f5482" name="Changes" comment="FIX: 알림 기능 구현하다 웹소켓 구현이 안 되어 되돌림" />
+    <list default="true" id="0d2ab5f1-60b5-4e55-abc9-28bec89f5482" name="Changes" comment="FIX: 알림 기능 구현하다 웹소켓 구현이 안 되어 되돌림">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-react/src/components/CollaborativeExcalidraw.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-react/src/components/CollaborativeExcalidraw.jsx" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -189,7 +192,15 @@
       <option name="project" value="LOCAL" />
       <updated>1734506031022</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="FIX: 알림 기능 구현하다 웹소켓 구현이 안 되어 되돌림">
+      <option name="closed" value="true" />
+      <created>1734506073920</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1734506073920</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
