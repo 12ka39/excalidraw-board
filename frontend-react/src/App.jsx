@@ -12,6 +12,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<BoardList />} />
           <Route path="/write" element={<ExcalidrawEditor />} />
+          <Route path="/write/:roomId" element={<ExcalidrawEditor />} />
           <Route path="/post/:id" element={<PostView />} />
           <Route path="/edit/:id" element={<EditPost />} />
         </Routes>

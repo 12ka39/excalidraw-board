@@ -4,13 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0d2ab5f1-60b5-4e55-abc9-28bec89f5482" name="Changes" comment="FEAT: 게시글 상세페이지에서 (JSON 저장된) 데이터 조회 가능하도록 구현">
+    <list default="true" id="0d2ab5f1-60b5-4e55-abc9-28bec89f5482" name="Changes" comment="FEAT: 게시글 수정/삭제 로직 구현">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/data/posts.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend/data/posts.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/server.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/backend/server.mjs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-react/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-react/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-react/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-react/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend-react/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-react/src/App.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-react/src/components/BoardList.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-react/src/components/BoardList.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-react/src/components/PostView.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-react/src/components/PostView.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-react/src/components/ExcalidrawEditor.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-react/src/components/ExcalidrawEditor.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -89,7 +91,7 @@
       <updated>1734419336342</updated>
       <workItem from="1734419337371" duration="222000" />
       <workItem from="1734419842741" duration="11179000" />
-      <workItem from="1734484592842" duration="5738000" />
+      <workItem from="1734484592842" duration="8106000" />
     </task>
     <task id="LOCAL-00001" summary="FEAT: exclidraw 에디터 페이지 구현">
       <option name="closed" value="true" />
@@ -155,7 +157,15 @@
       <option name="project" value="LOCAL" />
       <updated>1734488230084</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="FEAT: 게시글 수정/삭제 로직 구현">
+      <option name="closed" value="true" />
+      <created>1734491398986</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1734491398986</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -180,6 +190,7 @@
     <MESSAGE value="FIX: 코드 버전 충돌 해결" />
     <MESSAGE value="FEAT: 에디터에 그림 그리면 JSON에 데이터 저장" />
     <MESSAGE value="FEAT: 게시글 상세페이지에서 (JSON 저장된) 데이터 조회 가능하도록 구현" />
-    <option name="LAST_COMMIT_MESSAGE" value="FEAT: 게시글 상세페이지에서 (JSON 저장된) 데이터 조회 가능하도록 구현" />
+    <MESSAGE value="FEAT: 게시글 수정/삭제 로직 구현" />
+    <option name="LAST_COMMIT_MESSAGE" value="FEAT: 게시글 수정/삭제 로직 구현" />
   </component>
 </project>
