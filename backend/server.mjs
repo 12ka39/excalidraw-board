@@ -1,4 +1,3 @@
-// server.mjs
 import express from 'express';
 import fs from 'fs/promises';
 import path from 'path';
@@ -16,7 +15,7 @@ const httpServer = createServer(app);
 // Socket.IO 서버 생성 및 CORS 설정
 const io = new Server(httpServer, {
   cors: {
-    origin: "http://localhost:5173", // Vite 기본 포트
+    origin: "http://localhost:5173",
     methods: ["GET", "POST"]
   }
 });
@@ -30,15 +29,6 @@ app.use(express.json());
 
 // 실시간 협업을 위한 방 관리
 const rooms = new Map();
-
-/**
- * Room 데이터 구조
- * {
- *   users: Set<string>, // 접속한 사용자들의 socket.id
- *   elements: Array,    // Excalidraw 요소들
- *   lastUpdate: Date    // 마지막 업데이트 시간
- * }
- */
 
 // 웹소켓 이벤트 처리
 io.on('connection', (socket) => {
@@ -80,8 +70,11 @@ io.on('connection', (socket) => {
       room.elements = elements;
       room.lastUpdate = new Date();
 
-      // 같은 방의 다른 사용자들에게 업데이트 브로드캐스트
-      socket.to(roomId).emit('elementsUpdated', elements);
+      // 같은 방의 모든 사용자에게 업데이트 전송 (자신 포함)
+      io.in(roomId).emit('elementsUpdated', {
+        elements: elements,
+        userId: socket.id
+      });
     }
   });
 
@@ -100,7 +93,6 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     console.log('사용자 연결 해제됨:', socket.id);
 
-    // 사용자가 참여한 모든 방에서 제거
     rooms.forEach((room, roomId) => {
       if (room.users.has(socket.id)) {
         room.users.delete(socket.id);
@@ -113,11 +105,6 @@ io.on('connection', (socket) => {
         }
       }
     });
-  });
-
-  // 에러 처리
-  socket.on('error', (error) => {
-    console.error('Socket error:', error);
   });
 });
 
@@ -138,8 +125,6 @@ async function initializePostsFile() {
     await fs.writeFile(POSTS_FILE, JSON.stringify({ posts: [], lastId: 0 }));
   }
 }
-
-// CRUD API 엔드포인트들은 그대로 유지...
 
 // 서버 초기화 및 시작
 async function startServer() {
