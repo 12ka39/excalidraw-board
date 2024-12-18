@@ -4,10 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0d2ab5f1-60b5-4e55-abc9-28bec89f5482" name="Changes" comment="FEAT: 웹소켓으로 방 연결 기능 저장">
+    <list default="true" id="0d2ab5f1-60b5-4e55-abc9-28bec89f5482" name="Changes" comment="FEAT: 웹소켓으로 실시간 그림그리기 기능 구현">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/data/posts.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend/data/posts.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/server.mjs" beforeDir="false" afterPath="$PROJECT_DIR$/backend/server.mjs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-react/src/components/CollaborativeExcalidraw.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-react/src/components/CollaborativeExcalidraw.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,7 +86,7 @@
       <updated>1734419336342</updated>
       <workItem from="1734419337371" duration="222000" />
       <workItem from="1734419842741" duration="11179000" />
-      <workItem from="1734484592842" duration="11438000" />
+      <workItem from="1734484592842" duration="12382000" />
     </task>
     <task id="LOCAL-00001" summary="FEAT: exclidraw 에디터 페이지 구현">
       <option name="closed" value="true" />
@@ -176,7 +176,15 @@
       <option name="project" value="LOCAL" />
       <updated>1734500813186</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="FEAT: 웹소켓으로 실시간 그림그리기 기능 구현">
+      <option name="closed" value="true" />
+      <created>1734502185890</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1734502185890</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -204,6 +212,7 @@
     <MESSAGE value="FEAT: 게시글 수정/삭제 로직 구현" />
     <MESSAGE value="FEAT: 웹소켓 이용해 협업 그리기 기능 구현 중" />
     <MESSAGE value="FEAT: 웹소켓으로 방 연결 기능 저장" />
-    <option name="LAST_COMMIT_MESSAGE" value="FEAT: 웹소켓으로 방 연결 기능 저장" />
+    <MESSAGE value="FEAT: 웹소켓으로 실시간 그림그리기 기능 구현" />
+    <option name="LAST_COMMIT_MESSAGE" value="FEAT: 웹소켓으로 실시간 그림그리기 기능 구현" />
   </component>
 </project>
