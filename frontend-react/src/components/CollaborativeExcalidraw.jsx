@@ -149,14 +149,12 @@ const CollaborativeExcalidraw = ({ roomId, excalidrawAPI, setExcalidrawAPI }) =>
           )}
         </div>
 
-        {isConnected && nickname && (
-            <ChatWindow
-                key={roomId}
-                roomId={roomId}
-                socket={socketRef.current}
-                nickname={nickname}
-            />
-        )}
+        <ChatWindow
+            key={roomId}
+            roomId={roomId}
+            socket={socketRef.current}
+            nickname={nickname}
+        />
       </div>
   );
 };
