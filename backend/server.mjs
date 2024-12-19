@@ -27,7 +27,7 @@ const POSTS_FILE = path.join(DATA_DIR, 'posts.json');
 // 미들웨어 설정
 app.use(express.json());
 
-// CRUD API 엔드포인트들
+// *** CRUD API 엔드포인트들 ***
 // 게시글 목록 조회
 app.get('/api/posts', async (req, res) => {
   try {
@@ -153,6 +153,9 @@ app.delete('/api/posts/:id', async (req, res) => {
   }
 });
 
+
+
+
 // 실시간 협업을 위한 방 관리
 const rooms = new Map();
 
@@ -160,36 +163,37 @@ const rooms = new Map();
 io.on('connection', (socket) => {
   console.log('사용자 연결됨:', socket.id);
 
-  // 방 참가 처리
-  socket.on('joinRoom', (roomId) => {
+  socket.on('joinRoom', (data) => {
+    const { roomId, nickname } = data;
     socket.join(roomId);
-    console.log(`사용자 ${socket.id}가 방 ${roomId}에 참가함`);
+    console.log(`사용자 ${nickname}(${socket.id})가 방 ${roomId}에 참가함`);
 
-    // 방이 없으면 새로 생성
     if (!rooms.has(roomId)) {
       rooms.set(roomId, {
-        users: new Set(),
+        users: new Map(),
         elements: [],
         lastUpdate: new Date()
       });
     }
 
     const room = rooms.get(roomId);
-    room.users.add(socket.id);
+    room.users.set(socket.id, { nickname });
 
     // 새로 접속한 사용자에게 현재 캔버스 상태 전송
     socket.emit('canvasState', room.elements);
 
     // 다른 사용자들에게 새 사용자 참가 알림
-    socket.to(roomId).emit('userJoined', socket.id);
+    io.to(roomId).emit('userJoined', {
+      userId: socket.id,
+      nickname: nickname
+    });
 
-    // 현재 방의 상태 로깅
     console.log(`방 ${roomId} 현재 사용자 수: ${room.users.size}`);
   });
 
   // 그리기 요소 업데이트 처리
-  socket.on('updateElements', ({ roomId, elements }) => {
-    console.log(`사용자 ${socket.id}가 방 ${roomId}의 요소 업데이트`);
+  socket.on('updateElements', ({ roomId, elements, nickname }) => {
+    console.log(`사용자 ${nickname}(${socket.id})가 방 ${roomId}의 요소 업데이트`);
 
     if (rooms.has(roomId)) {
       const room = rooms.get(roomId);
@@ -199,18 +203,20 @@ io.on('connection', (socket) => {
       // 같은 방의 모든 사용자에게 업데이트 전송 (자신 포함)
       io.in(roomId).emit('elementsUpdated', {
         elements: elements,
-        userId: socket.id
+        userId: socket.id,
+        nickname
       });
     }
   });
 
   // 포인터 위치 업데이트 처리
-  socket.on('pointerUpdate', ({ roomId, pointer }) => {
+  socket.on('pointerUpdate', ({ roomId, pointer, nickname }) => {
     if (rooms.has(roomId)) {
       // 같은 방의 다른 사용자들에게 포인터 위치 브로드캐스트
       socket.to(roomId).emit('pointerUpdated', {
         userId: socket.id,
-        pointer
+        pointer,
+        nickname
       });
     }
   });
@@ -221,16 +227,27 @@ io.on('connection', (socket) => {
 
     rooms.forEach((room, roomId) => {
       if (room.users.has(socket.id)) {
+        const userData = room.users.get(socket.id);
         room.users.delete(socket.id);
-        io.to(roomId).emit('userLeft', socket.id);
 
-        // 방에 아무도 없으면 방 삭제
+        io.to(roomId).emit('userLeft', {
+          userId: socket.id,
+          nickname: userData.nickname
+        });
+
         if (room.users.size === 0) {
           console.log(`방 ${roomId} 삭제됨 (사용자 없음)`);
           rooms.delete(roomId);
         }
       }
     });
+  });
+
+  socket.on('chatMessage', ({ roomId, message }) => {
+    if (rooms.has(roomId)) {
+      // 같은 방의 모든 사용자에게 메시지 브로드캐스트
+      io.in(roomId).emit('chatMessage', message);
+    }
   });
 });
 
