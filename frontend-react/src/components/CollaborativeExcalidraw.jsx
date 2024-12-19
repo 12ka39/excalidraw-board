@@ -1,54 +1,62 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { Excalidraw } from '@excalidraw/excalidraw';
 import { io } from 'socket.io-client';
 import Toast from './Toast';
 import { generateNickname } from '../utils/nicknameGenerator';
-
-const socket = io('http://localhost:3000');
+import ChatWindow from "./ChatWindow.jsx";
 
 const CollaborativeExcalidraw = ({ roomId, excalidrawAPI, setExcalidrawAPI }) => {
+  const socketRef = useRef(null);
   const [collaborators, setCollaborators] = useState(new Map());
   const [isConnected, setIsConnected] = useState(false);
   const [lastReceivedElements, setLastReceivedElements] = useState(null);
   const [toast, setToast] = useState(null);
   const [nickname, setNickname] = useState('');
 
+  // 컴포넌트 마운트시 socket 초기화
   useEffect(() => {
-    // 컴포넌트 마운트 시 닉네임 생성
+    socketRef.current = io('http://localhost:3000');
     setNickname(generateNickname());
+
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+      }
+    };
   }, []);
 
   const showToast = (message, type = 'info') => {
     setToast({ message, type });
   };
 
+  // 소켓 연결 및 이벤트 리스너 설정
   useEffect(() => {
-    if (!roomId) return;
+    if (!socketRef.current || !roomId || !nickname) return;
 
-    socket.on('connect', () => {
+    const socket = socketRef.current;
+
+    const handleConnect = () => {
       setIsConnected(true);
-      const generatedNickname = generateNickname(); // 닉네임 생성
-      setNickname(generatedNickname);
-      console.log('Socket connected, joining room:', roomId, 'with nickname:', generatedNickname);
-      socket.emit('joinRoom', { roomId, nickname: generatedNickname }); // 닉네임 전송
+      console.log('Socket connected, joining room:', roomId, 'with nickname:', nickname);
+      socket.emit('joinRoom', { roomId, nickname });
       showToast('서버에 연결되었습니다', 'success');
-    });
+    };
 
-    socket.on('disconnect', () => {
+    const handleDisconnect = () => {
       console.log('Socket disconnected');
       setIsConnected(false);
       showToast('서버와의 연결이 끊어졌습니다', 'error');
-    });
+    };
 
-    socket.on('canvasState', (elements) => {
+    const handleCanvasState = (elements) => {
       console.log('Received initial canvas state');
       if (excalidrawAPI && elements) {
         setLastReceivedElements(elements);
         excalidrawAPI.updateScene({ elements });
       }
-    });
+    };
 
-    socket.on('elementsUpdated', (data) => {
+    const handleElementsUpdated = (data) => {
       if (excalidrawAPI && data.elements) {
         if (data.userId !== socket.id) {
           setLastReceivedElements(data.elements);
@@ -56,18 +64,18 @@ const CollaborativeExcalidraw = ({ roomId, excalidrawAPI, setExcalidrawAPI }) =>
           showToast(`${data.nickname || '익명'}님이 그림을 수정했습니다`, 'info');
         }
       }
-    });
+    };
 
-    socket.on('userJoined', (data) => {
+    const handleUserJoined = (data) => {
       console.log('User joined:', data);
       showToast(`${data.nickname}님이 입장했습니다`, 'info');
-    });
+    };
 
-    socket.on('pointerUpdated', ({ userId, pointer, nickname }) => {
+    const handlePointerUpdated = ({ userId, pointer, nickname }) => {
       setCollaborators(prev => new Map(prev.set(userId, { pointer, nickname })));
-    });
+    };
 
-    socket.on('userLeft', (data) => {
+    const handleUserLeft = (data) => {
       console.log('User left:', data);
       setCollaborators(prev => {
         const next = new Map(prev);
@@ -75,33 +83,43 @@ const CollaborativeExcalidraw = ({ roomId, excalidrawAPI, setExcalidrawAPI }) =>
         return next;
       });
       showToast(`${data.nickname}님이 퇴장했습니다`, 'warning');
-    });
+    };
 
+    // 이벤트 리스너 등록
+    socket.on('connect', handleConnect);
+    socket.on('disconnect', handleDisconnect);
+    socket.on('canvasState', handleCanvasState);
+    socket.on('elementsUpdated', handleElementsUpdated);
+    socket.on('userJoined', handleUserJoined);
+    socket.on('pointerUpdated', handlePointerUpdated);
+    socket.on('userLeft', handleUserLeft);
+
+    // 컴포넌트 언마운트 시 이벤트 리스너 제거
     return () => {
-      socket.off('connect');
-      socket.off('disconnect');
-      socket.off('canvasState');
-      socket.off('elementsUpdated');
-      socket.off('userJoined');
-      socket.off('pointerUpdated');
-      socket.off('userLeft');
+      socket.off('connect', handleConnect);
+      socket.off('disconnect', handleDisconnect);
+      socket.off('canvasState', handleCanvasState);
+      socket.off('elementsUpdated', handleElementsUpdated);
+      socket.off('userJoined', handleUserJoined);
+      socket.off('pointerUpdated', handlePointerUpdated);
+      socket.off('userLeft', handleUserLeft);
     };
   }, [roomId, excalidrawAPI, nickname]);
 
   const onChange = useCallback((elements) => {
-    if (!roomId || !isConnected) return;
+    if (!socketRef.current || !roomId || !isConnected) return;
 
     if (JSON.stringify(elements) !== JSON.stringify(lastReceivedElements)) {
       console.log('Sending elements update');
-      socket.emit('updateElements', { roomId, elements, nickname });
+      socketRef.current.emit('updateElements', { roomId, elements, nickname });
       setLastReceivedElements(elements);
     }
   }, [roomId, isConnected, lastReceivedElements, nickname]);
 
   const onPointerUpdate = useCallback(({ x, y }) => {
-    if (!roomId || !isConnected) return;
+    if (!socketRef.current || !roomId || !isConnected) return;
 
-    socket.emit('pointerUpdate', {
+    socketRef.current.emit('pointerUpdate', {
       roomId,
       pointer: { x, y },
       nickname
@@ -109,23 +127,34 @@ const CollaborativeExcalidraw = ({ roomId, excalidrawAPI, setExcalidrawAPI }) =>
   }, [roomId, isConnected, nickname]);
 
   return (
-      <div className="border border-purple-100 rounded-lg" style={{ height: '60vh' }}>
-        <Excalidraw
-            excalidrawAPI={(api) => setExcalidrawAPI(api)}
-            onChange={onChange}
-            onPointerUpdate={onPointerUpdate}
-            collaborators={Array.from(collaborators.entries()).map(([id, data]) => ({
-              id,
-              pointer: data.pointer,
-              username: data.nickname || `User ${id.slice(0, 4)}`,
-              color: { background: '#ffcce5', stroke: '#ff99cc' }
-            }))}
-        />
-        {toast && (
-            <Toast
-                message={toast.message}
-                type={toast.type}
-                onClose={() => setToast(null)}
+      <div className="relative">
+        <div className="border border-purple-100 rounded-lg" style={{ height: '60vh' }}>
+          <Excalidraw
+              excalidrawAPI={(api) => setExcalidrawAPI(api)}
+              onChange={onChange}
+              onPointerUpdate={onPointerUpdate}
+              collaborators={Array.from(collaborators.entries()).map(([id, data]) => ({
+                id,
+                pointer: data.pointer,
+                username: data.nickname || `User ${id.slice(0, 4)}`,
+                color: { background: '#ffcce5', stroke: '#ff99cc' }
+              }))}
+          />
+          {toast && (
+              <Toast
+                  message={toast.message}
+                  type={toast.type}
+                  onClose={() => setToast(null)}
+              />
+          )}
+        </div>
+
+        {isConnected && nickname && (
+            <ChatWindow
+                key={roomId}
+                roomId={roomId}
+                socket={socketRef.current}
+                nickname={nickname}
             />
         )}
       </div>

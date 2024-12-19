@@ -27,7 +27,7 @@ const POSTS_FILE = path.join(DATA_DIR, 'posts.json');
 // 미들웨어 설정
 app.use(express.json());
 
-// CRUD API 엔드포인트들
+// *** CRUD API 엔드포인트들 ***
 // 게시글 목록 조회
 app.get('/api/posts', async (req, res) => {
   try {
@@ -153,12 +153,13 @@ app.delete('/api/posts/:id', async (req, res) => {
   }
 });
 
+
+
+
 // 실시간 협업을 위한 방 관리
 const rooms = new Map();
 
 // 웹소켓 이벤트 처리
-// server.mjs의 Socket.IO 부분만 수정
-
 io.on('connection', (socket) => {
   console.log('사용자 연결됨:', socket.id);
 
@@ -240,6 +241,13 @@ io.on('connection', (socket) => {
         }
       }
     });
+  });
+
+  socket.on('chatMessage', ({ roomId, message }) => {
+    if (rooms.has(roomId)) {
+      // 같은 방의 모든 사용자에게 메시지 브로드캐스트
+      io.in(roomId).emit('chatMessage', message);
+    }
   });
 });
 
