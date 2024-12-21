@@ -207,22 +207,6 @@ io.on('connection', (socket) => {
       });
     }
   });
-  // socket.on('updateElements', ({ roomId, elements, nickname }) => {
-  //   console.log(`사용자 ${nickname}(${socket.id})가 방 ${roomId}의 요소 업데이트`);
-  //
-  //   if (rooms.has(roomId)) {
-  //     const room = rooms.get(roomId);
-  //     room.elements = elements;
-  //     room.lastUpdate = new Date();
-  //
-  //     // 같은 방의 모든 사용자에게 업데이트 전송 (자신 포함)
-  //     io.in(roomId).emit('elementsUpdated', {
-  //       elements: elements,
-  //       userId: socket.id,
-  //       nickname
-  //     });
-  //   }
-  // });
 
   // 포인터 위치 업데이트 처리
   socket.on('pointerUpdate', ({ roomId, pointer, nickname }) => {
