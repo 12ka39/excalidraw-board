@@ -92,17 +92,37 @@ const ChatWindow = ({ roomId, socket, nickname }) => {
 
   // 사용자별 색상을 관리하는 함수
   const getUserColor = (senderId) => {
-    // 미리 정의된 색상 배열
+    // 미리 정의된 색상 배열 (20명용 색상 팔레트)
     const colors = [
-      { bg: '#FFE4E1', text: '#8B0000' }, // 연한 분홍색
-      { bg: '#E0FFFF', text: '#008B8B' }, // 연한 청록색
-      { bg: '#F0FFF0', text: '#006400' }, // 연한 초록색
-      { bg: '#FFF0F5', text: '#8B008B' }, // 연한 자주색
-      { bg: '#F5F5DC', text: '#8B4513' }  // 연한 베이지색
+      { bg: '#FFE4E1', text: '#8B0000' },  // Misty Rose
+      { bg: '#E0FFFF', text: '#008B8B' },  // Light Cyan
+      { bg: '#F0FFF0', text: '#006400' },  // Honeydew
+      { bg: '#FFF0F5', text: '#8B008B' },  // Lavender Blush
+      { bg: '#F5F5DC', text: '#8B4513' },  // Beige
+      { bg: '#E6E6FA', text: '#483D8B' },  // Lavender
+      { bg: '#FFF8DC', text: '#8B4513' },  // Cornsilk
+      { bg: '#F0F8FF', text: '#4169E1' },  // Alice Blue
+      { bg: '#F8F8FF', text: '#191970' },  // Ghost White
+      { bg: '#FFFACD', text: '#8B8B00' },  // Lemon Chiffon
+      { bg: '#FFE4B5', text: '#8B4513' },  // Moccasin
+      { bg: '#F0FFFF', text: '#008B8B' },  // Azure
+      { bg: '#FFF5EE', text: '#8B4513' },  // Seashell
+      { bg: '#F5FFFA', text: '#2F4F4F' },  // Mint Cream
+      { bg: '#FDF5E6', text: '#8B4513' },  // Old Lace
+      { bg: '#F0FFF0', text: '#006400' },  // Honeydew
+      { bg: '#FFFFF0', text: '#8B8B00' },  // Ivory
+      { bg: '#F5F5F5', text: '#696969' },  // White Smoke
+      { bg: '#FFF0F5', text: '#8B008B' },  // Lavender Blush
+      { bg: '#F0F8FF', text: '#00008B' }   // Alice Blue
     ];
 
-    // senderId를 기반으로 색상 선택 (간단한 해시 함수)
-    const index = senderId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % colors.length;
+    // senderId를 기반으로 고유한 색상 인덱스 생성
+    const hash = senderId.split('').reduce((acc, char) => {
+      return char.charCodeAt(0) + ((acc << 5) - acc);
+    }, 0);
+
+    // 항상 동일한 senderId는 동일한 색상을 가지도록 보장
+    const index = Math.abs(hash) % colors.length;
     return colors[index];
   };
 
@@ -160,42 +180,42 @@ const ChatWindow = ({ roomId, socket, nickname }) => {
         </div>
         {!isMinimized && (
             <>
-            <div
-                className="h-[400px] p-4 overflow-y-auto"
-                style={{ backgroundColor: '#f3e8ff' }}
-            >
-              {messages.map((msg, idx) => {
-                const isMyMessage = msg.sender === nickname;
-                const messageColor = isMyMessage ? null : getUserColor(msg.sender);
+              <div
+                  className="h-[400px] p-4 overflow-y-auto"
+                  style={{ backgroundColor: '#f3e8ff' }}
+              >
+                {messages.map((msg, idx) => {
+                  const isMyMessage = msg.sender === nickname;
+                  const messageColor = isMyMessage ? null : getUserColor(msg.sender);
 
-                return (
-                    <div
-                        key={idx}
-                        className={`mb-4 ${
-                            isMyMessage ? 'text-right' : 'text-left'
-                        }`}
-                    >
-                      <div className="mb-1 text-xs text-gray-900">
-                        {msg.sender}
-                      </div>
+                  return (
                       <div
-                          className={`inline-block max-w-[70%] rounded-lg px-4 py-2`}
-                          style={
-                            isMyMessage
-                                ? { backgroundColor: '#9333ea', color: 'white' }
-                                : {
-                                  backgroundColor: messageColor.bg,
-                                  color: messageColor.text
-                                }
-                          }
+                          key={idx}
+                          className={`mb-4 ${
+                              isMyMessage ? 'text-right' : 'text-left'
+                          }`}
                       >
-                        <div>{msg.text}</div>
+                        <div className="mb-1 text-xs text-gray-900">
+                          {msg.sender}
+                        </div>
+                        <div
+                            className={`inline-block max-w-[70%] rounded-lg px-4 py-2`}
+                            style={
+                              isMyMessage
+                                  ? { backgroundColor: '#9333ea', color: 'white' }
+                                  : {
+                                    backgroundColor: messageColor.bg,
+                                    color: messageColor.text
+                                  }
+                            }
+                        >
+                          <div>{msg.text}</div>
+                        </div>
                       </div>
-                    </div>
-                );
-              })}
-              <div ref={messageEndRef}/>
-            </div>
+                  );
+                })}
+                <div ref={messageEndRef}/>
+              </div>
 
               <form
                   onSubmit={handleSend}
