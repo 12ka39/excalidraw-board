@@ -12,15 +12,23 @@ const CollaborativeExcalidraw = ({ roomId, excalidrawAPI, setExcalidrawAPI }) =>
   const [lastReceivedElements, setLastReceivedElements] = useState(null);
   const [toast, setToast] = useState(null);
   const [nickname, setNickname] = useState('');
+  const lastBroadcastedElements = useRef(null); // 마지막으로 브로드캐스트한 elements 추적
+  const updateTimeoutRef = useRef(null); // 디바운스를 위한 timeout ref
 
   // 컴포넌트 마운트시 socket 초기화
   useEffect(() => {
-    socketRef.current = io('http://localhost:3000');
+    socketRef.current = io('http://localhost:3000', {
+      transports: ['websocket'],
+      upgrade: false
+    });
     setNickname(generateNickname());
 
     return () => {
       if (socketRef.current) {
         socketRef.current.disconnect();
+      }
+      if (updateTimeoutRef.current) {
+        clearTimeout(updateTimeoutRef.current);
       }
     };
   }, []);
@@ -52,6 +60,7 @@ const CollaborativeExcalidraw = ({ roomId, excalidrawAPI, setExcalidrawAPI }) =>
       console.log('Received initial canvas state');
       if (excalidrawAPI && elements) {
         setLastReceivedElements(elements);
+        lastBroadcastedElements.current = elements;
         excalidrawAPI.updateScene({ elements });
       }
     };
@@ -59,9 +68,15 @@ const CollaborativeExcalidraw = ({ roomId, excalidrawAPI, setExcalidrawAPI }) =>
     const handleElementsUpdated = (data) => {
       if (excalidrawAPI && data.elements) {
         if (data.userId !== socket.id) {
-          setLastReceivedElements(data.elements);
-          excalidrawAPI.updateScene({ elements: data.elements });
-          showToast(`${data.nickname || '익명'}님이 그림을 수정했습니다`, 'info');
+          const stringifiedCurrentElements = JSON.stringify(lastReceivedElements || []);
+          const stringifiedNewElements = JSON.stringify(data.elements);
+
+          if (stringifiedCurrentElements !== stringifiedNewElements) {
+            setLastReceivedElements(data.elements);
+            lastBroadcastedElements.current = data.elements;
+            excalidrawAPI.updateScene({ elements: data.elements });
+            showToast(`${data.nickname || '익명'}님이 그림을 수정했습니다`, 'info');
+          }
         }
       }
     };
@@ -107,14 +122,26 @@ const CollaborativeExcalidraw = ({ roomId, excalidrawAPI, setExcalidrawAPI }) =>
   }, [roomId, excalidrawAPI, nickname]);
 
   const onChange = useCallback((elements) => {
-    if (!socketRef.current || !roomId || !isConnected) return;
+    if (!socketRef.current || !roomId || !isConnected || !elements) return;
 
-    if (JSON.stringify(elements) !== JSON.stringify(lastReceivedElements)) {
-      console.log('Sending elements update');
-      socketRef.current.emit('updateElements', { roomId, elements, nickname });
-      setLastReceivedElements(elements);
+    // 이전 타임아웃 클리어
+    if (updateTimeoutRef.current) {
+      clearTimeout(updateTimeoutRef.current);
     }
-  }, [roomId, isConnected, lastReceivedElements, nickname]);
+
+    // 디바운스된 업데이트 실행
+    updateTimeoutRef.current = setTimeout(() => {
+      const stringifiedLastElements = JSON.stringify(lastBroadcastedElements.current || []);
+      const stringifiedNewElements = JSON.stringify(elements);
+
+      if (stringifiedLastElements !== stringifiedNewElements) {
+        console.log('Sending elements update');
+        socketRef.current.emit('updateElements', { roomId, elements, nickname });
+        lastBroadcastedElements.current = elements;
+        setLastReceivedElements(elements);
+      }
+    }, 30); // 30ms 디바운스
+  }, [roomId, isConnected, nickname]);
 
   const onPointerUpdate = useCallback(({ x, y }) => {
     if (!socketRef.current || !roomId || !isConnected) return;
